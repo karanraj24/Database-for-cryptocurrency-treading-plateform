@@ -1,0 +1,52 @@
+ 1. find the no. how many times all cryptocurrency has been changed.
+
+   select count(*)*update",crypto_pr_ccr_no from price_records count group by crypto_pr_ccr_no.		
+
+
+2. display buyer id, user id and transaction amount for all the users who have traded cryptocurrency with ccr_no=1001.
+
+   select bt.b_id,bt.buyer_user_id,(tr.qty*tr.value) as transaction_amt from trade_record tr inner join buyer_trader bt on tr.buyer_b_id=bt.b_id where crypto_ccr_no='1001'.
+
+
+3. display user who are in profit from buying cryptocurrency with ccr_no='1001'
+    
+   select a.asset_user_id,sum(((c.cur_price-a.buy_price)/a.buy_price)*100) as profit from asset a inner join cryptocurrency c on c.ccr_no=a.asset_ccr_no where c.ccr_no='1001' and 
+   (c.cur_price-a.buy_price)>0.
+
+
+4. display users on the basis of networth of the assest they own in descending order when they bought the assets.
+
+   select asset_user_id,sum(aqty*buy_price) as total_asset from assets group by asset_user_id order by total_asset desc;
+
+
+5. display maximum qty of cryptocurrency from each single user which are put on sale at a time.
+
+   select user_info_user_id,cryptocurrency_ccr_no,max(trade_qty) from trader_user group by cryptocurrency_ccr_no;
+
+
+6. display users with their country where treding service is available. 
+  
+   select ui.user_id,ui.u_country_name,cc.availability_of_service from user_info ui inner join country_has_code cc on cc.country_name=ui.u_country_name where cc.availability_of_service_status like 'a%';
+
+
+7. find the founder from china,usa and india with use of 'IN' clause along with their proffession and future projects and also give the name of cryptocurrency which they found.
+
+   select * from founder f left outer join crypto_has_founder cf on f.f_id=cf.founder_f_id where f.country in ('china','usa','india');
+
+
+8. find the users who have cryptocurrencies with quantity greater than 100.
+
+   select * from assets where aqty=any(select aqty from assets where qty>100);
+
+
+9. list the cryptocurrency with their current price and ICO.
+
+   select pr.value_dollar,pr.crypto_pr_ccr_no,c.cur_price from price_records pr inner join cryptocurrency c on pr.crypto_pr_ccr_no=c.ccr_no where pr.datepr=any(select pr.datepr from price records pr innerjoin cryptocurrency c on pr.datepr==c.doexistence);
+
+
+10.display tansaction records for the current year.(2018)
+
+   select * from trade_records where extract(year from t_date)=2018;
+
+
+  	
